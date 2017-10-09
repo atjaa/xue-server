@@ -8,23 +8,23 @@ def enable_cors():
     if('xue37.cn' in request.get('HTTP_HOST')):
         response.headers['Access-Control-Allow-Origin'] = 'http://www.xue37.cn'
     response.headers['Access-Control-Allow-Credentials'] = 'true'
-@route('/user/:name')
+@route('/bot/user/:name')
 def getUser(name):
     user = service.UserService()
     res = user.getUser(name)
     return res
-@route('/getbooklist',method=['post','get'])
+@route('/bot/getbooklist',method=['post','get'])
 def getbooklist():
     menuid = request.forms.get('menuid')
     books = service.Bookservice()
     res = books.getBooklist(menuid)
     return res
-@route('/iflogin',method=['post','get'])
+@route('/bot/iflogin',method=['post','get'])
 def iflogin():
     user = service.UserService()
     res = user.iflogin(request)
     return res
-@route('/login',method=['post','get'])
+@route('/bot/login',method=['post','get'])
 def login():
     username = request.forms.get('username')
     password = request.forms.get('password')
@@ -33,13 +33,13 @@ def login():
         return user.login(username,password,response)
     else:
         return 'param err'
-@route('/logout',method='post')
+@route('/bot/logout',method='post')
 def logout():
     username = request.forms.get('username')
     user = service.UserService()
     user.logout(username,response)
     return 'success'
-@route('/regist',method='post')
+@route('/bot/regist',method='post')
 def regist():
     username = request.forms.get('username')
     password = request.forms.get('password')

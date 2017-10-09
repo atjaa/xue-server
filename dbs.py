@@ -3,7 +3,7 @@ import MySQLdb as mdb
 class dbmanager():
     """docstring for """
     def __init__(self):
-        self.conn = mdb.connect('127.0.0.1','root','123456','xue')
+        self.conn = mdb.connect('192.168.0.2','root','pl!112233','xue')
         self.conn.autocommit(1)
         self.cursor = self.conn.cursor(cursorclass=mdb.cursors.DictCursor)
     def close(self):

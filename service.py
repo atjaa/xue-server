@@ -123,6 +123,33 @@ class Bookservice():
         except Exception as e:
             LogUtile().info(str(e),'Bookservice.getBooklist')
             return 'err'
+    def getBooklistByName(self,bookname):
+        sql = 'select * from books where bookname=%s order by chan desc'
+        values=[bookname]
+        try:
+            db = dbs.dbmanager()
+            results = db.select(sql,values,10)
+            reslist = []
+            for res in results:
+                reslist.append(res)
+            ress ={'res':reslist}
+            return ress
+        except Exception as e:
+            LogUtile().info(str(e),'Bookservice.getBooklistByName')
+            return 'err'
+    def addbook(self,param):
+        #添加图书
+        sql = 'insert into books(bookname,introduction,author,menuid,pan,createtime) values (%s,%s,%s,%s,%s,%s)'
+        t = time.time()
+        n = int(t)
+        values=[param.get('bookname'),param.get('introduction'),param.get('author'),param.get('menuid'),param.get('pan'),n]
+        try:
+            db = dbs.dbmanager()
+            db.insert(sql,values)
+            return "success"
+        except Exception as e:
+            LogUtile().info(str(e),'Bookservice.addbook')
+            return 'err'
 if __name__=='__main__':
     user = Bookservice()
     res = user.getBooklist('1-1')

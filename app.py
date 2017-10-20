@@ -19,6 +19,29 @@ def getbooklist():
     books = service.Bookservice()
     res = books.getBooklist(menuid)
     return res
+@route('/bot/addbook',method=['post','get'])
+def addbook():
+    param ={}
+    param['menuid'] = request.forms.get('menuid')
+    param['author'] = request.forms.get('author')
+    param['bookname'] = request.forms.get('bookname')
+    param['introduction'] = request.forms.get('introduction')
+    param['pan'] = request.forms.get('pan')
+    books = service.Bookservice()
+    user = service.UserService()
+    res = user.iflogin(request)
+    if res=='false':
+        return '当前用户未登陆'
+    books = service.Bookservice()
+    res = books.getBooklistByName(param.get('bookname'))
+    if(res == 'err' or len(res.get('res'))>0):
+        return "此图书已存在"
+    else:
+        br = books.addbook(param)
+        if(br=="success"):
+            return "success"
+        else:
+            return "添加失败"
 @route('/bot/iflogin',method=['post','get'])
 def iflogin():
     user = service.UserService()

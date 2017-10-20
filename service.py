@@ -131,6 +131,7 @@ class Bookservice():
             results = db.select(sql,values,10)
             reslist = []
             for res in results:
+                res['bookname']="《 "+res.get('bookname')+" 》"
                 reslist.append(res)
             ress ={'res':reslist}
             return ress

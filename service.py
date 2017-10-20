@@ -117,6 +117,7 @@ class Bookservice():
                 return 'false'
             reslist = []
             for res in results:
+                res['bookname']="《 "+res.get('bookname')+" 》"
                 reslist.append(res)
             ress ={'res':reslist}
             return ress
@@ -131,19 +132,18 @@ class Bookservice():
             results = db.select(sql,values,10)
             reslist = []
             for res in results:
-                res['bookname']="《 "+res.get('bookname')+" 》"
                 reslist.append(res)
             ress ={'res':reslist}
             return ress
         except Exception as e:
             LogUtile().info(str(e),'Bookservice.getBooklistByName')
             return 'err'
-    def addbook(self,param):
+    def addbook(self,param,username):
         #添加图书
-        sql = 'insert into books(bookname,introduction,author,menuid,pan,createtime) values (%s,%s,%s,%s,%s,%s)'
+        sql = 'insert into books(bookname,introduction,author,menuid,pan,createtime,owner) values (%s,%s,%s,%s,%s,%s,%s)'
         t = time.time()
         n = int(t)
-        values=[param.get('bookname'),param.get('introduction'),param.get('author'),param.get('menuid'),param.get('pan'),n]
+        values=[param.get('bookname'),param.get('introduction'),param.get('author'),param.get('menuid'),param.get('pan'),n,username]
         try:
             db = dbs.dbmanager()
             db.insert(sql,values)

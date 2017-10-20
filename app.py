@@ -32,12 +32,13 @@ def addbook():
     res = user.iflogin(request)
     if res=='false':
         return '当前用户未登陆'
+    username = res.get('username')
     books = service.Bookservice()
     res = books.getBooklistByName(param.get('bookname'))
     if(res == 'err' or len(res.get('res'))>0):
         return "此图书已存在"
     else:
-        br = books.addbook(param)
+        br = books.addbook(param,username)
         if(br=="success"):
             return "success"
         else:

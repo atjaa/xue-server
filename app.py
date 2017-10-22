@@ -33,6 +33,9 @@ def addbook():
     if res=='false':
         return '当前用户未登陆'
     username = res.get('username')
+    usertype = user.getUser(username)
+    if(usertype != '1' or usertype != '3'):
+        return '当前用户没有权限'
     books = service.Bookservice()
     res = books.getBooklistByName(param.get('bookname'))
     if(res == 'err' or len(res.get('res'))>0):

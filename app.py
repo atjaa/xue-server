@@ -34,7 +34,7 @@ def addbook():
         return '当前用户未登陆'
     username = res.get('username')
     usertype = user.getUser(username)
-    if(usertype != '1' or usertype != '3'):
+    if(not (usertype.get('type') == '1' or usertype.get('type') == '3')):
         return '当前用户没有权限'
     books = service.Bookservice()
     res = books.getBooklistByName(param.get('bookname'))
@@ -46,6 +46,29 @@ def addbook():
             return "success"
         else:
             return "添加失败"
+@route('/bot/getbookcomment',method=['post','get'])
+def getbookcomment():
+    bookid = request.forms.get('bookid')
+    books = service.Bookservice()
+    res = books.getBookComments(bookid)
+    return res
+@route('/bot/addbookcomment',method=['post','get'])
+def addbookcomment():
+    param ={}
+    param['bookid'] = request.forms.get('bookid')
+    param['comment'] = request.forms.get('comment')
+    books = service.Bookservice()
+    user = service.UserService()
+    res = user.iflogin(request)
+    if res=='false':
+        return '当前用户未登陆'
+    username = res.get('username')
+    books = service.Bookservice()
+    br = books.addbookcomment(param,username)
+    if(br=="success"):
+        return "success"
+    else:
+        return "添加失败"
 @route('/bot/iflogin',method=['post','get'])
 def iflogin():
     user = service.UserService()

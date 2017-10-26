@@ -151,6 +151,36 @@ class Bookservice():
         except Exception as e:
             LogUtile().info(str(e),'Bookservice.addbook')
             return 'err'
+    def addbookcomment(self,param,username):
+        #添加图书评论
+        sql = 'insert into comments(username,comment,bookid,createtime) values (%s,%s,%s,%s)'
+        t = time.time()
+        n = int(t)
+        values=[username,param.get('comment'),param.get('bookid'),n]
+        try:
+            db = dbs.dbmanager()
+            db.insert(sql,values)
+            return "success"
+        except Exception as e:
+            LogUtile().info(str(e),'Bookservice.addbookcomment')
+            return 'err'
+    def getBookComments(self,bookid):
+        sql = 'select t.*,(select nickname from user where username=t.username) as nickname from comments t where bookid=%s'
+        values=[bookid]
+        try:
+            db = dbs.dbmanager()
+            results = db.select(sql,values,10)
+            if(len(results)==0):
+                return 'false'
+            reslist = []
+            for res in results:
+                res['createtime'] = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(res.get('createtime')))
+                reslist.append(res)
+            ress ={'res':reslist}
+            return ress
+        except Exception as e:
+            LogUtile().info(str(e),'Bookservice.getBookComments')
+            return 'err'
 if __name__=='__main__':
     user = Bookservice()
     res = user.getBooklist('1-1')

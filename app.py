@@ -27,6 +27,7 @@ def addbook():
     param['bookname'] = request.forms.get('bookname')
     param['introduction'] = request.forms.get('introduction')
     param['pan'] = request.forms.get('pan')
+    param['source'] = request.forms.get('source')
     books = service.Bookservice()
     user = service.UserService()
     res = user.iflogin(request)

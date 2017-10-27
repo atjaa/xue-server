@@ -53,6 +53,12 @@ def getbookcomment():
     books = service.Bookservice()
     res = books.getBookComments(bookid)
     return res
+@route('/bot/addchan',method=['post','get'])
+def addchan():
+    bookid = request.forms.get('bookid')
+    books = service.Bookservice()
+    res = books.addchan(bookid)
+    return res
 @route('/bot/addbookcomment',method=['post','get'])
 def addbookcomment():
     param ={}

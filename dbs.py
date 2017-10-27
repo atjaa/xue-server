@@ -22,6 +22,17 @@ class dbmanager():
             if(ifcloseconn):
                 self.cursor.close()
                 self.conn.close()
+    def update(self,sql,values,ifcloseconn=True):
+        try:
+            self.cursor.execute(sql,values)
+            #self.conn.commit()
+        except Exception,e:
+            print str(e)
+            self.conn.rollback()
+        finally:
+            if(ifcloseconn):
+                self.cursor.close()
+                self.conn.close()
     def select(self,sql,values,num,ifcloseconn=True):
         try:
             count = self.cursor.execute(sql,values)

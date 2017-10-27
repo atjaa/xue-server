@@ -164,6 +164,19 @@ class Bookservice():
         except Exception as e:
             LogUtile().info(str(e),'Bookservice.addbookcomment')
             return 'err'
+    def addchan(self,bookid):
+        #添加图书评论
+        sql = 'update books set chan=chan+1,updatetime=%s where id=%s'
+        t = time.time()
+        n = int(t)
+        values=[n,bookid]
+        try:
+            db = dbs.dbmanager()
+            db.update(sql,values)
+            return "success"
+        except Exception as e:
+            LogUtile().info(str(e),'Bookservice.addchan')
+            return 'err'
     def getBookComments(self,bookid):
         sql = 'select t.*,(select nickname from user where username=t.username) as nickname from comments t where bookid=%s'
         values=[bookid]

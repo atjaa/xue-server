@@ -16,8 +16,9 @@ def getUser(name):
 @route('/bot/getbooklist',method=['post','get'])
 def getbooklist():
     menuid = request.forms.get('menuid')
+    currentpage = request.forms.get('currentpage')
     books = service.Bookservice()
-    res = books.getBooklist(menuid)
+    res = books.getBooklist(menuid,currentpage)
     return res
 @route('/bot/addbook',method=['post','get'])
 def addbook():

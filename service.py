@@ -1,4 +1,4 @@
-#!/usr/bin/python
+0#!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import dbs
 import mycrypto
@@ -107,19 +107,29 @@ class UserService():
         else:
             return False
 class Bookservice():
-    def getBooklist(self,menuid):
-        sql = 'select * from books where menuid=%s order by chan desc'
-        values=[menuid]
+    def getBooklist(self,menuid,currentpage):
+        sql = 'select * from books where menuid=%s order by chan desc limit %s,%s'
+        p=15
+        values=[menuid,(int(currentpage)-1)*p,int(p)]
         try:
             db = dbs.dbmanager()
-            results = db.select(sql,values,10)
+            results = db.select(sql,values,p)
             if(len(results)==0):
                 return 'false'
             reslist = []
             for res in results:
                 res['bookname']="《 "+res.get('bookname')+" 》"
                 reslist.append(res)
-            ress ={'res':reslist}
+            # 查询页数
+            sqlco='select count(1) as countnum from books where menuid=%s'
+            valuesco=[menuid]
+            db = dbs.dbmanager()
+            pcount=0
+            resultco = db.select(sqlco,valuesco,1)
+            if(len(resultco)>0):
+                pcount=int(resultco[0].get('countnum'))
+            # 查询页数结束
+            ress ={'res':reslist,'pcount':pcount}
             return ress
         except Exception as e:
             LogUtile().info(str(e),'Bookservice.getBooklist')
@@ -196,5 +206,5 @@ class Bookservice():
             return 'err'
 if __name__=='__main__':
     user = Bookservice()
-    res = user.getBooklist('1-1')
+    res = user.getBooklist('1-1',1)
     print res

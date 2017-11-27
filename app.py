@@ -13,6 +13,11 @@ def getUser(name):
     user = service.UserService()
     res = user.getUser(name)
     return res
+@route('/bot/visitcount',method=['post','get'])
+def gevisitcounttUser():
+    user = service.UserService()
+    res = user.visitCount()
+    return res
 @route('/bot/getbooklist',method=['post','get'])
 def getbooklist():
     menuid = request.forms.get('menuid')

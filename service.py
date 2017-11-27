@@ -7,8 +7,22 @@ import cookie
 from log import LogUtile
 
 class UserService():
+    def visitCount(self):
+        try:
+            sql = 'select count from visit where id =1'
+            db = dbs.dbmanager()
+            results = db.select(sql,'',1)
+            return results[0]
+        except Exception as e:
+            LogUtile().info(str(e),'UserService.visitCount')
+            return 'err'
     def iflogin(self,request):
         try:
+            # 访问计数开始
+            sql = 'update visit set count=count+1 where id=1'
+            db = dbs.dbmanager()
+            db.update(sql,values)
+            # 访问计数结束
             co = cookie.CookieManager()
             username = co.getCookie(request,'xue-username')
             nickname = co.getCookie(request,'xue-nickname')

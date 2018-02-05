@@ -21,7 +21,7 @@ class UserService():
             # 访问计数开始
             sql = 'update visit set count=count+1 where id=1'
             db = dbs.dbmanager()
-            db.update(sql,values)
+            db.update(sql,'')
             # 访问计数结束
             co = cookie.CookieManager()
             username = co.getCookie(request,'xue-username')

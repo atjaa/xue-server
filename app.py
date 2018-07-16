@@ -18,6 +18,17 @@ def gevisitcounttUser():
     user = service.UserService()
     res = user.visitCount()
     return res
+@route('/bot/searchbook',method=['post','get'])
+def searchbook():
+    utype = request.forms.get('utype')
+    uvalue = request.forms.get('uvalue')
+    currentpage = request.forms.get('currentpage')
+    if(not utype == None or not uvalue == None or not currentpage == None):
+        book = service.Bookservice()
+        res = book.searchbook(utype,uvalue,currentpage)
+        return res
+    else:
+        return 'err'
 @route('/bot/getbooklist',method=['post','get'])
 def getbooklist():
     menuid = request.forms.get('menuid')

@@ -121,6 +121,46 @@ class UserService():
         else:
             return False
 class Bookservice():
+    def searchbook(self,utype,uvalue,currentpage):
+        p=15
+        args = '%' +uvalue+ '%'
+        sql = "select * from books where bookname like %s order by chan desc limit %s,%s"
+        if (utype=='1'): #按书名查询
+            sql = "select * from books where bookname like %s order by chan desc limit %s,%s"
+        elif (utype=='2'): #按作者查询
+            sql = "select * from books where author like %s order by chan desc limit %s,%s"
+        else:             # 按简介查询
+            sql = "select * from books where introduction like %s order by chan desc limit %s,%s"
+        values=[args,(int(currentpage)-1)*p,int(p)]
+        try:
+            db = dbs.dbmanager()
+            results = db.select(sql,values,p)
+            if(len(results)==0):
+                return 'false'
+            reslist = []
+            for res in results:
+                res['bookname']="《 "+res.get('bookname')+" 》"
+                reslist.append(res)
+            # 查询页数
+            sqlco="select count(1) as countnum from books where bookname like %s"
+            if (utype=='1'): #按书名查询
+                sqlco = "select count(1) as countnum from books where bookname like %s"
+            elif (utype=='2'): #按作者查询
+                sqlco = "select count(1) as countnum from books where author like %s"
+            else:             # 按简介查询
+                sqlco = "select count(1) as countnum from books where introduction like %s"
+            valuesco=[args]
+            db = dbs.dbmanager()
+            pcount=0
+            resultco = db.select(sqlco,valuesco,1)
+            if(len(resultco)>0):
+                pcount=int(resultco[0].get('countnum'))
+            # 查询页数结束
+            ress ={'res':reslist,'pcount':pcount}
+            return ress
+        except Exception as e:
+            LogUtile().info(str(e),'Bookservice.searchbook')
+            return 'err'
     def getBooklist(self,menuid,currentpage):
         sql = 'select * from books where menuid=%s order by chan desc limit %s,%s'
         p=15

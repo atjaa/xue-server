@@ -2,6 +2,9 @@
 # -*- coding: UTF-8 -*-
 from bottle import route,run,request,response,hook
 import service
+import sys
+reload(sys) 
+sys.setdefaultencoding('utf-8')
 @hook('after_request')
 def enable_cors():
     # 设置只允许www.xue37.cn 和180.76.239.61 跨域

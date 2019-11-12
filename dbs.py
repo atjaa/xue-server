@@ -3,7 +3,7 @@ import MySQLdb as mdb
 class dbmanager():
     """docstring for """
     def __init__(self):
-        self.conn = mdb.connect('192.168.0.5','root','pl!112233','xue')
+        self.conn = mdb.connect('172.16.0.4','root','pl!112233','xue',charset='utf8')
         self.conn.autocommit(1)
         self.cursor = self.conn.cursor(cursorclass=mdb.cursors.DictCursor)
     def close(self):
@@ -52,8 +52,8 @@ if __name__=='__main__':
     values=['黑牛','123','小黑']
     db = dbmanager()
     db.insert(sql,values)'''
-    sql='select * from user where name=%s'
-    values=['黑牛']
+    sql='select * from user where nickname=%s'
+    values=['小黑']
     db = dbmanager()
     results = db.select(sql,values,1)
     print results
